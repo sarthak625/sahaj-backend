@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('./partials/head.ejs')%>
+  <script>
+    window.onload = function() {
+      document.getElementById('login-email').addEventListener('click', function() {
+        window.location = '/login-with-email'
+      });
+      document.getElementById('login-as-admin').addEventListener('click', function() {
+        window.location = '/login-as-admin'
+      });
+    }
+  </script>
+</head>
+
+<body>
+  <div class="container-fluid">
+    <%- include('./partials/jumbotron.ejs')%>
+    <div class="container button-container">
+      <div class="login-btn col-md-3 btn btn-primary" id="login-email">
+        Login with email
+      </div>
+
+      <div class="login-btn col-md-3 btn btn-danger">
+        Login with google
+      </div>
+
+      <div class="login-btn col-md-3 btn btn-light" id="login-as-admin">
+        Admin login
+      </div>
+
+      <a href="/auth/google" class="btn btn-danger"><span class="fa fa-google-plus"></span> Google</a>
+    </div>
+  </div>
+
+</body>
+
+</html>
