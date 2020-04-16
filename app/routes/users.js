@@ -33,7 +33,7 @@ router.get(
 router.get(
   '/redirect',
   passport.authenticate('google', {
-    successRedirect: '/dashboard',
+    successRedirect: '/',
     failureRedirect: '/error',
     session: false
   })

@@ -20,10 +20,15 @@ fs.readdirSync(routesPath).filter((file) => {
     ? router.use(`/${routeFile}`, require(`./${routeFile}`))
     : ''
 })
+// http://3.215.69.186:3000/users/redirect
 
 /*
  * Setup routes for index
  */
+router.get('/test', (req, res) => {
+  res.send('index')
+})
+
 router.get('/', (req, res) => {
   res.render('index')
 })
