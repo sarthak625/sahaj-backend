@@ -59,9 +59,11 @@ const googleLogin = new GoogleStrategy(
     callbackURL: process.env.GOOGLE_CALLBACK_URL
   },
   (token, refreshToken, profile, done) => {
+    console.log('here')
     // make the code asynchronous
     // User.findOne won't fire until we have all our data back from Google
     process.nextTick(() => {
+      console.log({ profile })
       // eslint-disable-next-line consistent-return
       User.findOne({ 'google.id': profile.id }, (err, user) => {
         if (err) {
@@ -79,6 +81,9 @@ const googleLogin = new GoogleStrategy(
         newUser.google.token = token
         newUser.google.name = profile.displayName
         newUser.google.email = profile.emails[0].value // pull the first email
+
+        newUser.name = profile.displayName
+        newUser.email = profile.emails[0].value
 
         // save the user
         newUser.save((error) => {

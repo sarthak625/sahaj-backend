@@ -1,18 +1,22 @@
-.container .button-container {
-  margin: 0 auto;
-  /* margin-left: 12%; */
+/*!
+ * Start Bootstrap - Busines Frontpage (https://startbootstrap.com/template-overviews/business-frontpage)
+ * Copyright 2013-2019 Start Bootstrap
+ * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-business-frontpage/blob/master/LICENSE)
+ */
+ body {
+  padding-top: 56px;
 }
 
-.login-container {
-  display: inline-block;
+body #footer {
+  padding: 20px;
+  height: 30px;
+  flex-shrink: 0;
+  background-color:white !important;
+  color: black !important;
 }
 
-.container-fluid .container .login-btn {
+.button-container {
   display: block;
-  margin: 0 auto;
-  margin-top: 2%;
-}
-
-#login-form {
-  display: block;
+  margin-top: 3%;
+  padding: 10px;
 }

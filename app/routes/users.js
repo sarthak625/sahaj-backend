@@ -22,19 +22,20 @@ const trimRequest = require('trim-request')
 // email gets their emails
 router.get(
   '/auth/google',
-  // passport.authenticate('google', { scope: ['profile', 'email'] }),
+  passport.authenticate('google', { scope: ['profile', 'email'] })
   // trimRequest.all,
-  (req, res) => {
-    res.status.send('hey')
-  }
+  // (req, res) => {
+  //   res.status(200).send('hey')
+  // }
 )
 
 // the callback after google has authenticated the user
 router.get(
-  '/auth/google/callback',
+  '/redirect',
   passport.authenticate('google', {
-    successRedirect: '/login-as-admin',
-    failureRedirect: '/'
+    successRedirect: '/dashboard',
+    failureRedirect: '/error',
+    session: false
   })
 )
 

@@ -36,6 +36,18 @@ router.get('/login-as-admin', (req, res) => {
   res.render('login-admin')
 })
 
+router.get('/login-page', (req, res) => {
+  res.render('login-page')
+})
+
+router.get('/dashboard', (req, res) => {
+  res.redirect('https://meet.meditatenow.org/')
+})
+
+router.get('/error', (req, res) => {
+  res.send('redirected')
+})
+
 /*
  * Handle 404 error
  */

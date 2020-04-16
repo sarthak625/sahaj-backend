@@ -3,37 +3,61 @@
 
 <head>
   <%- include('./partials/head.ejs')%>
-  <script>
-    window.onload = function() {
-      document.getElementById('login-email').addEventListener('click', function() {
-        window.location = '/login-with-email'
-      });
-      document.getElementById('login-as-admin').addEventListener('click', function() {
-        window.location = '/login-as-admin'
-      });
-    }
-  </script>
 </head>
 
 <body>
-  <div class="container-fluid">
-    <%- include('./partials/jumbotron.ejs')%>
-    <div class="container button-container">
-      <div class="login-btn col-md-3 btn btn-primary" id="login-email">
-        Login with email
-      </div>
 
-      <div class="login-btn col-md-3 btn btn-danger">
-        Login with google
-      </div>
+  <!-- Navigation -->
+  <%- include('./partials/navbar.ejs')%>
 
-      <div class="login-btn col-md-3 btn btn-light" id="login-as-admin">
-        Admin login
+  <!-- Header -->
+  <header class="bg-primary py-5 mb-5">
+    <div class="container h-100">
+      <div class="row h-100 align-items-center">
+        <div class="col-lg-12">
+          <h1 class="display-4 text-white mt-5 mb-2">Sahaj</h1>
+          <p class="lead mb-5 text-white-50">Sahaj is a video conferencing solution designed to bring people together.</p>
+        </div>
       </div>
-
-      <a href="/auth/google" class="btn btn-danger"><span class="fa fa-google-plus"></span> Google</a>
     </div>
+  </header>
+
+  <!-- Page Content -->
+  <div class="container">
+
+    <div class="row">
+      <div class="col-md-8 mb-5">
+        <h2>What We Do</h2>
+        <hr>
+        <p>Join video conferences anywhere around the globe</p>
+        <a class="btn btn-primary btn-lg" href="/login-page">Login &raquo;</a>
+      </div>
+      <div class="col-md-4 mb-5">
+        <h2>Contact Us</h2>
+        <hr>
+        <address>
+          <strong>Sahaj</strong>
+          <br>3481 Melrose Place
+          <br>Beverly Hills, CA 90210
+          <br>
+        </address>
+        <address>
+          <abbr title="Phone">P:</abbr>
+          (123) 456-7890
+          <br>
+          <abbr title="Email">E:</abbr>
+          <a href="mailto:#">name@example.com</a>
+        </address>
+      </div>
+    </div>
+
   </div>
+
+  <footer class="py-5 bg-dark" id="footer">
+    <div class="container">
+      <p class="m-0 text-center text-white">Copyright &copy; Sahaj 2020</p>
+    </div>
+  </footer>
 
 </body>
 

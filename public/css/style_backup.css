@@ -1,0 +1,22 @@
+.container .button-container {
+  margin: 0 auto;
+  /* margin-left: 12%; */
+}
+
+.login-container {
+  display: inline-block;
+}
+
+.container-fluid .container .login-btn {
+  display: block;
+  margin: 0 auto;
+  margin-top: 2%;
+}
+
+#login-form {
+  display: block;
+}
+
+#main-container {
+  padding: 0;
+}
