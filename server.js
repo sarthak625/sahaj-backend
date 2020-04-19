@@ -72,11 +72,11 @@ app.use(
     })
   })
 )
-app.use(express.static('public'))
+app.use('/api', express.static('public'))
 app.set('views', path.join(__dirname, 'views'))
 // app.engine('html', require('ejs').renderFile)
 app.set('view engine', 'ejs')
-app.use(require('./app/routes'))
+app.use('/api', require('./app/routes'))
 app.listen(app.get('port'))
 
 // Init MongoDB
