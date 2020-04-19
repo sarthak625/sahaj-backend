@@ -45,7 +45,7 @@ router.get(
     if (req.session) {
       req.session.isLoggedIn = true
     }
-    res.redirect('/dashboard')
+    res.redirect('/')
   }
 )
 
