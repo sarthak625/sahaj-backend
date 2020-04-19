@@ -83,7 +83,7 @@ router.get('/logout', (req, res, next) => {
   if (req.session) {
     req.logout()
   }
-  return res.redirect('/api')
+  return res.redirect('/api/')
 })
 
 /*
