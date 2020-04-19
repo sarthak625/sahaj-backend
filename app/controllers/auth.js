@@ -154,7 +154,7 @@ const saveUserAccessAndReturnToken = async (req, user) => {
           '1d',
           true
         )
-        data.location = '/admin-dashboard'
+        data.location = '/api/admin-dashboard'
       } else {
         req.session.isAdminLoggedIn = false
         req.session.jitsiToken = createJitsiToken(
@@ -166,7 +166,7 @@ const saveUserAccessAndReturnToken = async (req, user) => {
           '1d',
           false
         )
-        data.location = '/dashboard'
+        data.location = '/api/dashboard'
       }
 
       resolve(data)
