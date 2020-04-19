@@ -3,22 +3,32 @@
 
 <head>
   <%- include('./partials/head.ejs')%>
-  <script>
+  <!-- <script>
     window.onload = function() {
       const redir = (evt) => {
-        window.location = 'https://meet.mediatenow.org'
+        const jitsiToken = '<%= locals.jitsiToken %>';
+        window.location = `https://meet.meditatenow.org/?jwt=<%= locals.jitsiToken %>`;
       }
       document.getElementById('redirect-to-jitsi').addEventListener('click', redir);
     }
-  </script>
+  </script> -->
 </head>
 
 <body>
 
   <!-- Navigation -->
   <%- include('./partials/navbar_login.ejs')%>
-  <div class="container" id="video-conf-button">
+  <!-- <div class="container" id="video-conf-button">
     <button class="btn btn-primary" id="redirect-to-jitsi">Open Video Conference Room</button>
+  </div> -->
+
+  <div class="container" id='jitsi-frame-container'>
+    <!-- <iframe id="jitsi-frame" src="https://meet.meditatenow.org" frameborder="0"></iframe> -->
+    <iframe
+    id="jitsi-frame"
+    allow="camera; microphone"
+    src="https://meet.meditatenow.org/?jwt=<%= locals.jitsiToken %>" frameborder="0">
+    </iframe>
   </div>
 
 

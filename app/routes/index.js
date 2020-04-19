@@ -34,7 +34,10 @@ router.get('/', (req, res) => {
     if (req.session.isAdminLoggedIn) {
       res.redirect('/admin-dashboard')
     } else {
-      res.render('dashboard')
+      console.log('logged in')
+      res.render('dashboard', {
+        jitsiToken: req.session.jitsiToken
+      })
     }
   } else {
     res.render('index')
@@ -63,7 +66,9 @@ router.get('/login-page', (req, res) => {
 
 router.get('/dashboard', (req, res) => {
   if (req.session.isLoggedIn) {
-    res.render('dashboard')
+    res.render('dashboard', {
+      jitsiToken: req.session.jitsiToken
+    })
   } else {
     res.render('index')
   }

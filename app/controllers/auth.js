@@ -9,6 +9,7 @@ const { addHours } = require('date-fns')
 const { matchedData } = require('express-validator')
 const auth = require('../middleware/auth')
 const emailer = require('../middleware/emailer')
+const JWT = require('jsonwebtoken')
 const HOURS_TO_BLOCK = 2
 const LOGIN_ATTEMPTS = 5
 
@@ -62,6 +63,60 @@ const setUserInfo = (req) => {
 }
 
 /**
+ * Create JWT token
+ * @param {Object} object Payload for JWT
+ * @param {String} secret JWT secret
+ * @param {Number} expiresIn Expiry time in ms
+ * @param {Object} data Extra params
+ * @return {String} JWT
+ */
+const createToken = (object, secret, expiresIn, data) => {
+  if (data) {
+    object.data = data
+  }
+
+  let params
+  if (!expiresIn) {
+    params = { algorithm: 'HS256', expiresIn: '18h' }
+  } else {
+    params = { algorithm: 'HS256', expiresIn }
+  }
+  return JWT.sign(object, secret, params);
+}
+
+/**
+ * Create JITSI auth token
+ * @param {String} room Room name
+ * @param {Object} user User object
+ * @param {Number} tokenExpiresIn Token expiry time
+ * @param {Boolean} isModerator is moderator?
+ * @return {String} authentication token
+ */
+const createJitsiToken = (room, user, tokenExpiresIn, isModerator) => {
+  const params = {
+    context: {
+      group: 'none',
+      user: {
+        email: user.email,
+        name: user.name
+      }
+    },
+    aud: '*',
+    iss: process.env.JITSI_JWT_APP_ID,
+    sub: process.env.JITSI_HOST_NAME,
+    room,
+    moderator: isModerator
+  }
+
+  const authenticationToken = createToken(
+    params,
+    process.env.JITSI_JWT_SECRET,
+    tokenExpiresIn
+  )
+  return authenticationToken
+}
+
+/**
  * Saves a new user access and then returns token
  * @param {Object} req - request object
  * @param {Object} user - user object
@@ -89,9 +144,27 @@ const saveUserAccessAndReturnToken = async (req, user) => {
       if (data.user.role === 'admin') {
         req.session.isAdminLoggedIn = true
         req.session.data = data
+        req.session.jitsiToken = createJitsiToken(
+          '*',
+          {
+            email: data.user.email,
+            name: data.user.email.split('@')[0]
+          },
+          '1d',
+          true
+        )
         data.location = '/admin-dashboard'
       } else {
         req.session.isAdminLoggedIn = false
+        req.session.jitsiToken = createJitsiToken(
+          '*',
+          {
+            email: data.user.email,
+            name: data.user.email.split('@')[0]
+          },
+          '1d',
+          false
+        )
         data.location = '/dashboard'
       }
 
