@@ -9,7 +9,6 @@ const { addHours } = require('date-fns')
 const { matchedData } = require('express-validator')
 const auth = require('../middleware/auth')
 const emailer = require('../middleware/emailer')
-const JWT = require('jsonwebtoken')
 const HOURS_TO_BLOCK = 2
 const LOGIN_ATTEMPTS = 5
 
@@ -81,7 +80,7 @@ const createToken = (object, secret, expiresIn, data) => {
   } else {
     params = { algorithm: 'HS256', expiresIn }
   }
-  return JWT.sign(object, secret, params);
+  return jwt.sign(object, secret, params);
 }
 
 /**
@@ -115,6 +114,8 @@ const createJitsiToken = (room, user, tokenExpiresIn, isModerator) => {
   )
   return authenticationToken
 }
+
+exports.createJitsiToken = createJitsiToken
 
 /**
  * Saves a new user access and then returns token

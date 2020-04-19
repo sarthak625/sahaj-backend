@@ -5,6 +5,7 @@ const express = require('express')
 const router = express.Router()
 require('../../config/passport')
 const passport = require('passport')
+const path = require('path')
 const requireAuth = passport.authenticate('jwt', {
   session: false
 })
@@ -42,12 +43,31 @@ router.get(
     session: false
   }),
   (req, res) => {
+    console.log(res.req.user)
+    const user = res.req.user
+
+    const jitsiToken = AuthController.createJitsiToken(
+      '*',
+      {
+        email: user.google.email,
+        name: user.google.email.split('@')[0]
+      },
+      '1d',
+      true
+    )
+
     if (req.session) {
       req.session.isLoggedIn = true
     }
-    res.redirect('/')
+    res.render('dashboard', {
+      jitsiToken
+    })
   }
 )
+
+router.get('/css/style.css', (req, res) => {
+  res.sendFile(path.join(__dirname, '../../public/css/style.css'))
+})
 
 /*
  * Get items route
