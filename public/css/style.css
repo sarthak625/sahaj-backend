@@ -20,3 +20,17 @@ body #footer {
   margin-top: 3%;
   padding: 10px;
 }
+
+.error-box {
+  list-style-type:none;
+}
+
+#error-messages .alert {
+  /* text-align: center; */
+  width: 80%;
+  margin-left: 10%;
+}
+
+#video-conf-button {
+  margin-top: 5%;
+}

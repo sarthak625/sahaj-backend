@@ -30,7 +30,23 @@ router.get('/test', (req, res) => {
 })
 
 router.get('/', (req, res) => {
-  res.render('index')
+  if (req.session.isLoggedIn) {
+    if (req.session.isAdminLoggedIn) {
+      res.redirect('/admin-dashboard')
+    } else {
+      res.render('dashboard')
+    }
+  } else {
+    res.render('index')
+  }
+})
+
+router.get('/admin-dashboard', (req, res) => {
+  if (req.session.isAdminLoggedIn) {
+    res.render('admin-dashboard')
+  } else {
+    res.render('error')
+  }
 })
 
 router.get('/login-with-email', (req, res) => {
@@ -46,11 +62,23 @@ router.get('/login-page', (req, res) => {
 })
 
 router.get('/dashboard', (req, res) => {
-  res.redirect('https://meet.meditatenow.org/')
+  if (req.session.isLoggedIn) {
+    res.render('dashboard')
+  } else {
+    res.render('index')
+  }
 })
 
 router.get('/error', (req, res) => {
-  res.send('redirected')
+  res.render('error')
+})
+
+router.get('/logout', (req, res, next) => {
+  req.session.isLoggedIn = false
+  if (req.session) {
+    req.logout()
+  }
+  return res.redirect('/')
 })
 
 /*

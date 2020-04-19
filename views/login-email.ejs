@@ -3,6 +3,42 @@
 
 <head>
   <%- include('./partials/head.ejs')%>
+  <script>
+    window.onload = function() {
+      $('#form').submit(submit);
+      function submit (evt) {
+        evt.preventDefault();
+        const email = document.getElementById('email').value
+        const password = document.getElementById('password').value
+
+        $.ajax({
+          contentType: 'application/json',
+          data: JSON.stringify({
+            email,
+            password
+          }),
+          dataType: 'json',
+          success: function(data){
+            console.log(data)
+            if (data.errorMessages) {
+              $('#error-messages').empty();
+              $("#error-messages").append(`<div class="alert alert-danger">${data.errorMessages[0]}</div>`)
+            } else {
+              window.location = data.location
+            }
+          },
+          error: function(err){
+            const msg = 'Invalid email or password'
+            $('#error-messages').empty();
+            $("#error-messages").append(`<div class="alert alert-danger">${msg}</div>`)
+          },
+          type: 'POST',
+          url: '/login'
+      }, console.log);
+      }
+      // document.getElementById('submit').addEventListener('click', submit)
+    }
+  </script>
 </head>
 
 <body>
@@ -20,24 +56,27 @@
     </div>
   </header>
 
+  <div class="error-box">
+    <div id="error-messages">
+    </div>
+  </div>
 
   <div class="container login-container" id="login-form">
-    <form>
+    <form id='form'>
       <div class="form-group">
-        <label for="exampleInputEmail1">Email address</label>
-        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+        <label for="email">Email address</label>
+        <input type="email" class="form-control" id="email" aria-describedby="emailHelp"
           placeholder="Enter email">
         <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
       </div>
       <div class="form-group">
-        <label for="exampleInputPassword1">Password</label>
-        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" id="password" placeholder="Password">
       </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <button class="btn btn-primary" id="submit">Submit</button>
     </form>
   </div>
   </div>
-
 </body>
 
 </html>

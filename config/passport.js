@@ -1,7 +1,10 @@
+/* eslint-disable max-statements */
 const passport = require('passport')
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy
 
 const User = require('../app/models/user')
+const AuthorizedDomains = require('../app/models/authorizedDomains')
+
 const auth = require('../app/middleware/auth')
 const JwtStrategy = require('passport-jwt').Strategy
 
@@ -52,6 +55,9 @@ passport.use(jwtLogin)
  * Login with Google
  */
 
+// AuthorizedDomains.find({}).then(console.log).catch(console.log)
+// User.find({}).then(console.log).catch(console.log)
+
 const googleLogin = new GoogleStrategy(
   {
     clientID: process.env.GOOGLE_OAUTH_CLIENT_ID,
@@ -59,11 +65,9 @@ const googleLogin = new GoogleStrategy(
     callbackURL: process.env.GOOGLE_CALLBACK_URL
   },
   (token, refreshToken, profile, done) => {
-    console.log('here')
     // make the code asynchronous
     // User.findOne won't fire until we have all our data back from Google
     process.nextTick(() => {
-      console.log({ profile })
       // eslint-disable-next-line consistent-return
       User.findOne({ 'google.id': profile.id }, (err, user) => {
         if (err) {
@@ -74,23 +78,49 @@ const googleLogin = new GoogleStrategy(
           return done(null, user)
         }
 
-        const newUser = new User()
+        const email = profile.emails[0].value
 
-        // set all of the relevant information
-        newUser.google.id = profile.id
-        newUser.google.token = token
-        newUser.google.name = profile.displayName
-        newUser.google.email = profile.emails[0].value // pull the first email
-
-        newUser.name = profile.displayName
-        newUser.email = profile.emails[0].value
-
-        // save the user
-        newUser.save((error) => {
-          if (error) {
-            throw error
+        AuthorizedDomains.findOne({}).then((doc) => {
+          if (err) {
+            return done(err)
           }
-          return done(null, newUser)
+          let isAuthorizedEmail = false
+
+          if (doc) {
+            const domainList = doc.domainList
+            for (let i = 0; i < domainList.length; i++) {
+              const domain = domainList[i]
+              if (email.includes(domain)) {
+                isAuthorizedEmail = true
+                break
+              }
+            }
+          }
+
+          if (isAuthorizedEmail) {
+            const newUser = new User()
+
+            // set all of the relevant information
+            newUser.google.id = profile.id
+            newUser.google.token = token
+            newUser.google.name = profile.displayName
+            newUser.google.email = email // pull the first email
+
+            newUser.name = profile.displayName
+            newUser.email = email
+
+            // save the user
+            newUser.save((error) => {
+              if (error) {
+                throw error
+              }
+              return done(null, newUser)
+            })
+          } else {
+            return done('UNAUTHORIZED_DOMAIN')
+          }
+
+          return done(null, {})
         })
       })
     })

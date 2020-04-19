@@ -1,3 +1,4 @@
+/* eslint-disable max-statements */
 const jwt = require('jsonwebtoken')
 const User = require('../models/user')
 const UserAccess = require('../models/userAccess')
@@ -79,10 +80,22 @@ const saveUserAccessAndReturnToken = async (req, user) => {
       }
       const userInfo = setUserInfo(user)
       // Returns data with access token
-      resolve({
+      const data = {
         token: generateToken(user._id),
         user: userInfo
-      })
+      }
+      req.session.data = data
+
+      if (data.user.role === 'admin') {
+        req.session.isAdminLoggedIn = true
+        req.session.data = data
+        data.location = '/admin-dashboard'
+      } else {
+        req.session.isAdminLoggedIn = false
+        data.location = '/dashboard'
+      }
+
+      resolve(data)
     })
   })
 }
@@ -442,23 +455,35 @@ const getUserIdFromToken = async (token) => {
  * @param {Object} req - request object
  * @param {Object} res - response object
  */
+// eslint-disable-next-line consistent-return
 exports.login = async (req, res) => {
   try {
+    console.log('rogin route')
     const data = matchedData(req)
     const user = await findUser(data.email)
+    if (!user) {
+      return res.json({ errorMessages: ['The user has not registered'] })
+    }
     await userIsBlocked(user)
     await checkLoginAttemptsAndBlockExpires(user)
     const isPasswordMatch = await auth.checkPassword(data.password, user)
-    if (!isPasswordMatch) {
-      utils.handleError(res, await passwordsDoNotMatch(user))
-    } else {
+    if (isPasswordMatch) {
       // all ok, register access and return token
       user.loginAttempts = 0
       await saveLoginAttemptsToDB(user)
+      req.session.isLoggedIn = true
       res.status(200).json(await saveUserAccessAndReturnToken(req, user))
+    } else {
+      return res.json({ errorMessages: ['Invalid email or password'] })
     }
   } catch (error) {
-    utils.handleError(res, error)
+    const errorMessages = []
+    if (error.code === 404) {
+      errorMessages.push('The user has not registered')
+    } else {
+      errorMessages.push('Invalid email or password')
+    }
+    return res.json({ errorMessages })
   }
 }
 

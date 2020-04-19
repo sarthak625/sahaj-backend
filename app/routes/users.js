@@ -29,14 +29,24 @@ router.get(
   // }
 )
 
+// {
+//   successRedirect: '/dashboard',
+//   failureRedirect: '/error',
+//   session: true
+// }
+
 // the callback after google has authenticated the user
 router.get(
   '/redirect',
   passport.authenticate('google', {
-    successRedirect: '/',
-    failureRedirect: '/error',
     session: false
-  })
+  }),
+  (req, res) => {
+    if (req.session) {
+      req.session.isLoggedIn = true
+    }
+    res.redirect('/dashboard')
+  }
 )
 
 /*

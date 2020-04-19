@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('./partials/head.ejs')%>
+  <script>
+    window.onload = function() {
+      const redir = (evt) => {
+        window.location = 'https://meet.mediatenow.org'
+      }
+      document.getElementById('redirect-to-jitsi').addEventListener('click', redir);
+    }
+  </script>
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <%- include('./partials/navbar_login.ejs')%>
+  <div class="container" id="video-conf-button">
+    <button class="btn btn-primary" id="redirect-to-jitsi">Open Video Conference Room</button>
+  </div>
+
+
+  <footer class="py-5 bg-dark" id="footer">
+    <div class="container">
+      <p class="m-0 text-center text-white">Copyright &copy; MediateNow 2020</p>
+    </div>
+  </footer>
+
+</body>
+
+</html>
