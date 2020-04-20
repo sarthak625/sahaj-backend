@@ -532,7 +532,6 @@ const getUserIdFromToken = async (token) => {
 // eslint-disable-next-line consistent-return
 exports.login = async (req, res) => {
   try {
-    console.log('rogin route')
     const data = matchedData(req)
     const user = await findUser(data.email)
     if (!user) {

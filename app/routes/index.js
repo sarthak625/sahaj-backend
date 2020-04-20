@@ -44,6 +44,25 @@ router.get('/', (req, res) => {
   }
 })
 
+router.post('/join_room', (req, res) => {
+  if (req.session.isLoggedIn) {
+    const roomName = req.body.roomName
+    let roomURL
+    if (/^([a-z0-9]{2,})$/.test(roomName)) {
+      roomURL = `${process.env.HOSTNAME}/${roomName}?jwt=${req.session.jitsiToken}`
+    } else {
+      return res.json({
+        errorMessages: [
+          'No special characters allowed in room name. The length must be 2 or more'
+        ]
+      })
+    }
+    res.json({ roomURL })
+  } else {
+    res.render('index')
+  }
+})
+
 router.get('/admin-dashboard', (req, res) => {
   if (req.session.isAdminLoggedIn) {
     res.render('admin-dashboard')

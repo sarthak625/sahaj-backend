@@ -47,6 +47,39 @@
     }
 
   </style>
+
+  <script>
+    window.onload = function() {
+      $('#room-form').submit(submit);
+      function submit (evt) {
+        evt.preventDefault();
+        const roomName = document.getElementById('room-input').value
+
+        $.ajax({
+          contentType: 'application/json',
+          data: JSON.stringify({
+            roomName,
+          }),
+          dataType: 'json',
+          success: function(data){
+            if (data.errorMessages) {
+              $('#error-messages').empty();
+              $("#error-messages").append(`<div class="alert alert-danger">${data.errorMessages[0]}</div>`)
+            } else {
+              window.location = data.roomURL
+            }
+          },
+          error: function(err){
+            const msg = 'Invalid email or password'
+            $('#error-messages').empty();
+            $("#error-messages").append(`<div class="alert alert-danger">${msg}</div>`)
+          },
+          type: 'POST',
+          url: '/api/join_room'
+      }, console.log);
+      }
+    }
+  </script>
 </head>
 
 <body>
@@ -57,15 +90,35 @@
     <button class="btn btn-primary" id="redirect-to-jitsi">Open Video Conference Room</button>
   </div> -->
 
-  <div class="container" id='jitsi-frame-container'>
-    <!-- <iframe id="jitsi-frame" src="https://meet.meditatenow.org" frameborder="0"></iframe> -->
+  <!-- <div class="container" id='jitsi-frame-container'>
     <iframe
     id="jitsi-frame"
     allow="camera; microphone"
     src="https://meet.meditatenow.org/?jwt=<%= locals.jitsiToken %>" frameborder="0">
     </iframe>
-  </div>
+  </div> -->
 
+  <!-- Header -->
+  <header class="bg-success py-5 mb-5">
+    <div class="container h-100">
+      <div class="row h-100 align-items-center">
+        <div class="col-lg-12">
+          <h1 class="display-4 text-white mt-5 mb-2">Enter room name</h1>
+          <form id='room-form'>
+            <div class="form-group">
+              <input type="text" id="room-input" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary">Go</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="error-box">
+    <div id="error-messages">
+    </div>
+  </div>
 
   <footer class="py-5 bg-dark" id="footer">
     <div class="container">

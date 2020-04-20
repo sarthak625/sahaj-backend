@@ -43,7 +43,6 @@ router.get(
     session: false
   }),
   (req, res) => {
-    console.log(res.req.user)
     const user = res.req.user
 
     const jitsiToken = AuthController.createJitsiToken(
