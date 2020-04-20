@@ -69,7 +69,7 @@
               const url = data.roomURL
               let token = url.split('?jwt=')[1]
               if (token === 'undefined') {
-                token = <%= jitsiToken %>
+                token = "<%- jitsiToken %>"
               }
               window.location = url.split('?jwt=')[0] + token
             }
