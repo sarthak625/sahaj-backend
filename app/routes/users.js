@@ -57,6 +57,7 @@ router.get(
 
     if (req.session) {
       req.session.isLoggedIn = true
+      console.log({ jitsiToken })
       req.session.jitsiToken = jitsiToken
     }
     res.render('dashboard', {
