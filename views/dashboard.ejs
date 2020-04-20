@@ -71,7 +71,7 @@
               if (token === 'undefined') {
                 token = <%= jitsiToken %>
               }
-              window.location = url.split('?jwt=')[1] + token
+              window.location = url.split('?jwt=')[0] + token
             }
           },
           error: function(err){
