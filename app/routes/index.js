@@ -45,6 +45,7 @@ router.get('/', (req, res) => {
 })
 
 router.post('/join_room', (req, res) => {
+  console.log(req.session)
   if (req.session.isLoggedIn) {
     const roomName = req.body.roomName
     let roomURL
