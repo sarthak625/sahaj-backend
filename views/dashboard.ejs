@@ -66,7 +66,12 @@
               $('#error-messages').empty();
               $("#error-messages").append(`<div class="alert alert-danger">${data.errorMessages[0]}</div>`)
             } else {
-              window.location = data.roomURL
+              const url = data.roomURL
+              let token = url.split('?jwt=')[1]
+              if (token === 'undefined') {
+                token = <%= jitsiToken %>
+              }
+              window.location = url.split('?jwt=')[1] + token
             }
           },
           error: function(err){
